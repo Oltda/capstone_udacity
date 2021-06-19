@@ -7,9 +7,9 @@ from flask_migrate import Migrate
 
 
 
-database_name = "stock_test"
 
-#database_name = "capstone_database"
+
+database_name = "capstone_database"
 
 database_path = "postgresql://{}:{}@{}/{}".format(
     'oltda', 'janaoltova', 'localhost:5432', database_name)

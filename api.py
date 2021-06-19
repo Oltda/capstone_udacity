@@ -14,7 +14,7 @@ def create_app(test_config=None):
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
     oauth = OAuth(app)
-    app.secret_key = 'very difficult'
+    app.secret_key = 'jgjhghg323jhg3j2hg3j2hg32jhg32jhg'
 
     AUTH0_DOMAIN = 'dev-j1fpxr2o.eu.auth0.com'
     AUTH0_JWT_API_AUDIENCE = 'warehouse'

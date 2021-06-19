@@ -31,7 +31,7 @@ class WarehouseTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "stock_test"
-        #self.database_name = "stock_database"
+
         self.database_path = "postgresql://{}:{}@{}/{}".format('oltda', 'janaoltova', 'localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
