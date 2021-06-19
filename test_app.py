@@ -9,16 +9,18 @@ from database import setup_db
 
 from dotenv import load_dotenv
 
+
+
+
+
+
 load_dotenv()
 
 manager_token = os.environ.get('warehousemanager_token')
 employee_token = os.environ.get('employee_token')
 
-def get_headers(token):
-    return {'Authorization': f'Bearer {token}'}
-
-
-
+def get_token(jwt):
+    return {'Authorization': f'Bearer {jwt}'}
 
 
 class WarehouseTestCase(unittest.TestCase):
@@ -40,19 +42,19 @@ class WarehouseTestCase(unittest.TestCase):
         }
 
         self.new_product_code = {
-            'product_code': 'VV2',
-            'description': 'vegetable',
-            'unit': 'kg'
+            'product_code': 'VV3',
+            'description': 'sweets',
+            'unit': '5 kg bag'
         }
 
 
 
         self.new_stock_item = {
-            'product_name': 'carrot',
+            'product_name': 'Monster',
             'quantity': '234',
             'expiration_date': '2021-06-21',
             'warehouse_id': '1',
-            'product_code': 'BB1'
+            'product_code': 'A2AA'
         }
 
 
@@ -76,7 +78,7 @@ class WarehouseTestCase(unittest.TestCase):
 
     """
     def test_get_warehouses(self):
-        res = self.client().get('/warehouse', headers=get_headers(manager_token))
+        res = self.client().get('/warehouse', headers=get_token(manager_token))
         data = json.loads(res.data)
 
 
@@ -96,7 +98,7 @@ class WarehouseTestCase(unittest.TestCase):
         self.assertEqual(data['code'], 'invalid_header')
 
     def test_post_warehouse(self):
-        res = self.client().post('/warehouse', json=self.new_warehouse, headers=get_headers(manager_token))
+        res = self.client().post('/warehouse', json=self.new_warehouse, headers=get_token(manager_token))
         data = json.loads(res.data)
 
         self.assertEqual(data['success'], True)
@@ -105,7 +107,7 @@ class WarehouseTestCase(unittest.TestCase):
 
     def test_405_post_warehouse(self):
 
-        res = self.client().post('/warehouse/2', json=self.new_warehouse, headers=get_headers(manager_token))
+        res = self.client().post('/warehouse/2', json=self.new_warehouse, headers=get_token(manager_token))
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 405)
@@ -114,7 +116,7 @@ class WarehouseTestCase(unittest.TestCase):
 
 
     def test_patch_warehouse(self):
-        res = self.client().patch('/warehouse/2', json={'name': 'edited name', 'address':'edited address'}, headers=get_headers(manager_token))
+        res = self.client().patch('/warehouse/2', json={'name': 'edited name', 'address':'edited address'}, headers=get_token(manager_token))
         data = json.loads(res.data)
 
         self.assertEqual(data['success'], True)
@@ -125,7 +127,7 @@ class WarehouseTestCase(unittest.TestCase):
 
 
     def test_422_patch_warehouse(self):
-        res = self.client().patch('/warehouse/554', json={'name': 'altered name', 'address':'altered address'}, headers=get_headers(manager_token))
+        res = self.client().patch('/warehouse/554', json={'name': 'altered name', 'address':'altered address'}, headers=get_token(manager_token))
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
@@ -134,16 +136,16 @@ class WarehouseTestCase(unittest.TestCase):
 
 
     def test_delete_warehouse(self):
-        res = self.client().delete('/warehouse/3', headers=get_headers(manager_token))
+        res = self.client().delete('/warehouse/8', headers=get_token(manager_token))
 
         data = json.loads(res.data)
 
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted_warehouse'], 3)
+        self.assertEqual(data['deleted_warehouse'], 8)
 
 
     def test_422_warehouse_does_not_exist(self):
-        res = self.client().delete('/warehouse/11111', headers=get_headers(manager_token))
+        res = self.client().delete('/warehouse/11111', headers=get_token(manager_token))
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
@@ -152,7 +154,7 @@ class WarehouseTestCase(unittest.TestCase):
 
 
     def test_get_product_codes(self):
-        res = self.client().get('/product-code', headers=get_headers(manager_token))
+        res = self.client().get('/product-code', headers=get_token(manager_token))
         data = json.loads(res.data)
 
 
@@ -170,7 +172,7 @@ class WarehouseTestCase(unittest.TestCase):
 
 
     def test_post_code(self):
-        res = self.client().post('/product-code', json=self.new_product_code, headers=get_headers(manager_token))
+        res = self.client().post('/product-code', json=self.new_product_code, headers=get_token(manager_token))
         data = json.loads(res.data)
 
         self.assertEqual(data['success'], True)
@@ -181,7 +183,7 @@ class WarehouseTestCase(unittest.TestCase):
 
     def test_405_post_product_code(self):
 
-        res = self.client().post('/product-code/2', json=self.new_product_code, headers=get_headers(manager_token))
+        res = self.client().post('/product-code/2', json=self.new_product_code, headers=get_token(manager_token))
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 405)
@@ -196,7 +198,7 @@ class WarehouseTestCase(unittest.TestCase):
 
 
     def test_get_stock_items(self):
-        res = self.client().get('/stock-items', headers=get_headers(manager_token))
+        res = self.client().get('/stock-items', headers=get_token(manager_token))
         data = json.loads(res.data)
 
 
@@ -215,7 +217,7 @@ class WarehouseTestCase(unittest.TestCase):
 
 
     def test_post_stock_items(self):
-        res = self.client().post('/stock-items', json=self.new_stock_item, headers=get_headers(manager_token))
+        res = self.client().post('/stock-items', json=self.new_stock_item, headers=get_token(manager_token))
         data = json.loads(res.data)
 
         self.assertEqual(data['success'], True)
@@ -226,7 +228,7 @@ class WarehouseTestCase(unittest.TestCase):
 
     def test_405_post_stock_items(self):
 
-        res = self.client().post('/stock-items/2', json=self.new_stock_item, headers=get_headers(manager_token))
+        res = self.client().post('/stock-items/2', json=self.new_stock_item, headers=get_token(manager_token))
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 405)
@@ -237,13 +239,13 @@ class WarehouseTestCase(unittest.TestCase):
 
 
     def test_patch_stock_item(self):
-        res = self.client().patch('/stock-items/3', json={
+        res = self.client().patch('/stock-items/1', json={
             'product_name': 'Dr. Pepper',
             'quantity': '213',
             'expiration_date': '2021-07-21',
             'warehouse_id': '1',
-            'product_code': 'BB1'
-            }, headers=get_headers(manager_token))
+            'product_code': 'A2AA'
+            }, headers=get_token(manager_token))
 
         data = json.loads(res.data)
 
@@ -260,7 +262,7 @@ class WarehouseTestCase(unittest.TestCase):
             'expiration_date': '2021-07-21',
             'warehouse_id': '1',
             'product_code': 'BB1'
-            }, headers=get_headers(manager_token))
+            }, headers=get_token(manager_token))
 
         data = json.loads(res.data)
 
@@ -272,17 +274,17 @@ class WarehouseTestCase(unittest.TestCase):
 
 
     def test_delete_stock_item(self):
-        res = self.client().delete('/stock-items/4', headers=get_headers(manager_token))
+        res = self.client().delete('/stock-items/11', headers=get_token(manager_token))
 
         data = json.loads(res.data)
 
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted_stock'], 4)
+        self.assertEqual(data['deleted_stock'], 11)
 
 
 
     def test_422_stock_item_does_not_exist(self):
-        res = self.client().delete('/stock-items/11111', headers=get_headers(manager_token))
+        res = self.client().delete('/stock-items/11111', headers=get_token(manager_token))
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
@@ -292,17 +294,17 @@ class WarehouseTestCase(unittest.TestCase):
 
 
     def test_delete_product_code(self):
-        res = self.client().delete('/product-code/3', headers=get_headers(manager_token))
+        res = self.client().delete('/product-code/9', headers=get_token(manager_token))
 
         data = json.loads(res.data)
 
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted_code'], 3)
+        self.assertEqual(data['deleted_code'], 9)
 
 
 
     def test_422_product_code_does_not_exist(self):
-        res = self.client().delete('/product-code/11111', headers=get_headers(manager_token))
+        res = self.client().delete('/product-code/11111', headers=get_token(manager_token))
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
@@ -313,7 +315,7 @@ class WarehouseTestCase(unittest.TestCase):
     # ROLE AND PERMISSION TEST
 
     def test_RBAC_patch_warehouse_employee(self):
-        res = self.client().patch('/warehouse/2', json={'name': 'employee changes', 'address':'employee address'}, headers=get_headers(employee_token))
+        res = self.client().patch('/warehouse/2', json={'name': 'employee changes', 'address':'employee address'}, headers=get_token(employee_token))
         data = json.loads(res.data)
 
         self.assertEqual(data['success'], False)
@@ -322,18 +324,12 @@ class WarehouseTestCase(unittest.TestCase):
 
 
     def test_RBAC_patch_warehouse_manager(self):
-        res = self.client().patch('/warehouse/2', json={'name': 'manager changes', 'address':'manager address'}, headers=get_headers(manager_token))
+        res = self.client().patch('/warehouse/2', json={'name': 'manager changes', 'address':'manager address'}, headers=get_token(manager_token))
         data = json.loads(res.data)
 
         self.assertEqual(data['success'], True)
         self.assertTrue(data['edited_warehouse_id'])
         self.assertEqual(res.status_code, 200)
-
-
-
-
-
-
 
 
 
