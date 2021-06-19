@@ -242,6 +242,12 @@ def create_app(test_config=None):
                 abort(404)
 
 
+            stock_to_delete = StockItems.query.filter(StockItems.product_code == code_to_delete.product_code).all()
+
+            for i in stock_to_delete:
+                i.delete()
+
+
             code_to_delete.delete()
 
             return jsonify({
