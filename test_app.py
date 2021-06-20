@@ -3,7 +3,7 @@ import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
 
-from .api import create_app
+from api import create_app
 
 from database import setup_db
 
@@ -24,7 +24,7 @@ def get_token(jwt):
 
 
 class WarehouseTestCase(unittest.TestCase):
-    """This class represents the trivia test case"""
+
 
     def setUp(self):
 
@@ -68,15 +68,10 @@ class WarehouseTestCase(unittest.TestCase):
 
 
     def tearDown(self):
-        """Executed after reach test"""
+
         pass
 
-    """
-    TODO
-    Write at least one test for each test for successful operation and for expected errors.
 
-
-    """
     def test_get_warehouses(self):
         res = self.client().get('/warehouse', headers=get_token(manager_token))
         data = json.loads(res.data)

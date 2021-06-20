@@ -2,8 +2,8 @@ from flask import Flask, request, abort, jsonify, render_template, session, redi
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
-from .database import setup_db, Warehouse, StockItems, ProductCodes
-from .auth import AuthError, requires_auth
+from database import setup_db, Warehouse, StockItems, ProductCodes
+from auth import AuthError, requires_auth
 
 from authlib.integrations.flask_client import OAuth
 
@@ -12,7 +12,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
-
+    CORS(app)
     oauth = OAuth(app)
     app.secret_key = 'jgjhghg323jhg3j2hg3j2hg32jhg32jhg'
 
@@ -44,17 +44,9 @@ def create_app(test_config=None):
 
 
 
-
-
-
-
-
-
     @app.route('/warehouse', methods=['GET'])
     @requires_auth('get:warehouse')
     def show_warehouses(payload):
-    #def show_warehouses():
-
 
         warehouse_collection = Warehouse.query.all()
         warehouse_list = []
@@ -72,8 +64,6 @@ def create_app(test_config=None):
             stock_item = {'id':i.id, 'name': i.product_name, 'quantity': i.quantity,
                           'expiration_date': i.expiration_date.strftime('%d-%b-%Y'), 'warehouse_id': i.warehouse_id, 'product_code': i.product_code, 'unit': code.unit}
             stock_array.append(stock_item)
-
-
 
 
         return jsonify({
@@ -107,8 +97,7 @@ def create_app(test_config=None):
                 'success': True,
                 'new_warehouse_id':warehouse.id
             })
-        except BaseException as e:
-            print('BaseException is ', e)
+        except:
             abort(422)
 
 
@@ -225,8 +214,7 @@ def create_app(test_config=None):
             })
 
 
-        except BaseException as e:
-            print('BaseException is ', e)
+        except:
             abort(422)
 
 
@@ -495,8 +483,9 @@ def create_app(test_config=None):
             "message": "method not allowed"
         }), 405
 
-
-
-
-
     return app
+
+app = create_app()
+
+if __name__ == '__main__':
+    app.run()
