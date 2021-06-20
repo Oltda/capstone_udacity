@@ -11,9 +11,10 @@ from flask_migrate import Migrate
 
 database_name = "capstone_database"
 
-database_path = "postgresql://{}:{}@{}/{}".format(
-    'oltda', 'janaoltova', 'localhost:5432', database_name)
+# database_path = "postgresql://{}:{}@{}/{}".format(
+#     'oltda', 'janaoltova', 'localhost:5432', database_name)
 
+database_path="postgres://ofapcuhmthwgzf:4dad289b111001edc5d9534f8ac3e396f6a662b0f6c3cc7ea00d3087b38a4c33@ec2-52-4-111-46.compute-1.amazonaws.com:5432/d5vufr3v9884d9"
 
 db = SQLAlchemy()
 
