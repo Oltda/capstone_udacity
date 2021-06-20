@@ -49,7 +49,7 @@ Mako==1.1.4
 MarkupSafe==1.1.1
 mysql-connector==2.2.9
 mysql-connector-python==8.0.22
-mysqlclient @ file:///C:/Users/Daniel/Documents/linkedin/tutorial%20jak%20delat%20flask/mysqlclient-1.4.6-cp38-cp38-win32.whl
+
 numpy==1.18.2
 oauthlib==3.1.1
 pandas==1.0.3
@@ -59,7 +59,7 @@ protobuf==3.14.0
 psycopg2==2.8.6
 psycopg2-binary==2.9.1
 pyasn1==0.4.8
-PyAudio @ file:///C:/Users/Daniel/AppData/Local/Programs/Python/Python38-32/Scripts/PyAudio-0.2.11-cp38-cp38-win32.whl
+
 pycparser==2.20
 pycryptodome==3.10.1
 Pygments==2.7.3
