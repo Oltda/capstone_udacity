@@ -4,10 +4,10 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 from datetime import datetime
 from flask_migrate import Migrate
+from dotenv import load_dotenv
 
 
-
-
+database_path = os.environ.get('DATABASE_URL')
 
 database_name = "capstone_database"
 
