@@ -23,7 +23,8 @@ def create_app(test_config=None):
     AUTH0_JWT_API_AUDIENCE = 'warehouse'
     AUTH0_CLIENT_ID = 'OKLQ4Z8FAnpNsf8KhIQPdKd61DXucXiO'
     #AUTH0_CALLBACK_URL = 'http://localhost:3000'
-    AUTH0_CALLBACK_URL = 'http://localhost:5000/result'
+    #AUTH0_CALLBACK_URL = 'http://localhost:5000/result'
+    AUTH0_CALLBACK_URL = 'https://dans-warehouse-app.herokuapp.com/result'
 
 
     @app.after_request
