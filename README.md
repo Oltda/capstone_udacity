@@ -45,10 +45,11 @@ endpoint:
     https://dans-warehouse-app.herokuapp.com/warehouse
 
 body:
-    {
-     "name" : "Warehouse6",
-     "address" : "City6"
-    }
+
+      {
+       "name" : "Warehouse6",
+       "address" : "City6"
+      }
    
 ********posting new product code********
 ----------------------------------------- 
