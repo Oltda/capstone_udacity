@@ -57,11 +57,12 @@ endpoint:
     https://dans-warehouse-app.herokuapp.com/product-code
     
 body:
-    {
-     "product_code" : "TY5",
-     "description" : "frozen meat",
-     "unit": "5 kg boxes"
-    }    
+
+      {
+       "product_code" : "TY5",
+       "description" : "frozen meat",
+       "unit": "5 kg boxes"
+      }    
     
 NOTE (each product code must have a unique name)
   
