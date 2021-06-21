@@ -3,13 +3,12 @@ stock items and product codes.
 
 Frontend has not yet been implemented.
 
-To obtain the access token test the application in Postman please visit the following url: 
+To obtain an access token to test the application in Postman please visit the following url: 
 
 https://dans-warehouse-app.herokuapp.com/authorization/url
 
-and click on the link provided which will either redirect you to Auth0 Login or provide you with 
-authorization token 
-
+and click on the link provided which will either redirect you to Auth0 Login 
+where you can enter the following credentials for two different roles:
 
 
 CREDENTIALS
