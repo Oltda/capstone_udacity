@@ -119,14 +119,15 @@ class WarehouseTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'method not allowed')
 
 
+
+
+
     def test_patch_warehouse(self):
         res = self.client().patch('/warehouse/2', json={'name': 'edited name', 'address':'edited address'}, headers=get_token(manager_token))
         data = json.loads(res.data)
 
         self.assertEqual(data['success'], True)
         self.assertTrue(data['edited_warehouse_id'])
-
-
 
 
 
@@ -137,6 +138,9 @@ class WarehouseTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unprocessable')
+
+
+
 
 
     def test_delete_warehouse(self):
@@ -162,6 +166,9 @@ class WarehouseTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'unprocessable')
 
 
+
+
+
     def test_get_product_codes(self):
         res = self.client().get('/product-code', headers=get_token(manager_token))
         data = json.loads(res.data)
@@ -178,6 +185,9 @@ class WarehouseTestCase(unittest.TestCase):
 
         self.assertEqual(data['success'], False)
         self.assertEqual(data['code'], 'invalid_header')
+
+
+
 
 
     def test_post_code(self):
@@ -206,8 +216,6 @@ class WarehouseTestCase(unittest.TestCase):
 
 
 
-
-
     def test_get_stock_items(self):
         res = self.client().get('/stock-items', headers=get_token(manager_token))
         data = json.loads(res.data)
@@ -225,6 +233,9 @@ class WarehouseTestCase(unittest.TestCase):
 
         self.assertEqual(data['success'], False)
         self.assertEqual(data['code'], 'invalid_header')
+
+
+
 
 
     def test_post_stock_items(self):
@@ -317,10 +328,8 @@ class WarehouseTestCase(unittest.TestCase):
         code = ProductCodes(product_code="CXS1", description="soft cheese",
                            unit='kg')
 
-
         code.id = 2
         code.insert()
-
 
         res = self.client().delete('/product-code/2', headers=get_token(manager_token))
 
@@ -332,9 +341,6 @@ class WarehouseTestCase(unittest.TestCase):
 
 
 
-
-
-
     def test_422_product_code_does_not_exist(self):
         res = self.client().delete('/product-code/11111', headers=get_token(manager_token))
         data = json.loads(res.data)
@@ -342,6 +348,10 @@ class WarehouseTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unprocessable')
+
+
+
+
 
 
     # ROLE AND PERMISSION TEST
