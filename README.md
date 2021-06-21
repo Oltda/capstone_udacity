@@ -33,7 +33,7 @@ password: Password2
 
 permissions: Can view, post, delete, patch warehouses, stock and view post, delete product codes
 NOTE: (patch was not implemented for product codes) 
------------------------------------------
+
 
 
 
