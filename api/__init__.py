@@ -8,6 +8,9 @@ from auth import AuthError, requires_auth
 from authlib.integrations.flask_client import OAuth
 
 
+
+
+
 def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
@@ -19,7 +22,9 @@ def create_app(test_config=None):
     AUTH0_DOMAIN = 'dev-j1fpxr2o.eu.auth0.com'
     AUTH0_JWT_API_AUDIENCE = 'warehouse'
     AUTH0_CLIENT_ID = 'OKLQ4Z8FAnpNsf8KhIQPdKd61DXucXiO'
-    AUTH0_CALLBACK_URL = 'http://localhost:3000'
+    #AUTH0_CALLBACK_URL = 'http://localhost:3000'
+    AUTH0_CALLBACK_URL = 'http://localhost:5000/result'
+
 
     @app.after_request
     def after_request(response):
@@ -37,9 +42,14 @@ def create_app(test_config=None):
             f'&response_type=token&client_id=' \
             f'{AUTH0_CLIENT_ID}&redirect_uri=' \
             f'{AUTH0_CALLBACK_URL}'
-        return jsonify({
-            'url': url
-        })
+
+        return render_template('login.html', url=url)
+
+
+    @app.route('/result', methods=['GET', 'POST'])
+    def callbackpage():
+
+        return render_template('result.html')
 
 
 

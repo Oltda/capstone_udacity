@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from api import create_app
 
-from database import setup_db
+from database import setup_db, Warehouse, StockItems, ProductCodes
 
 from dotenv import load_dotenv
 
@@ -58,7 +58,7 @@ class WarehouseTestCase(unittest.TestCase):
         }
 
 
-        # binds the app to the current context
+
         with self.app.app_context():
             self.db = SQLAlchemy()
             self.db.init_app(self.app)
@@ -70,6 +70,10 @@ class WarehouseTestCase(unittest.TestCase):
     def tearDown(self):
 
         pass
+
+
+
+
 
 
     def test_get_warehouses(self):
@@ -92,7 +96,12 @@ class WarehouseTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['code'], 'invalid_header')
 
+
+
+
+
     def test_post_warehouse(self):
+
         res = self.client().post('/warehouse', json=self.new_warehouse, headers=get_token(manager_token))
         data = json.loads(res.data)
 
@@ -131,12 +140,17 @@ class WarehouseTestCase(unittest.TestCase):
 
 
     def test_delete_warehouse(self):
-        res = self.client().delete('/warehouse/8', headers=get_token(manager_token))
+        warehouse = Warehouse(name="Test Warehouse", address="Test Address")
+        warehouse.id = 3
+        warehouse.insert()
+
+        res = self.client().delete('/warehouse/3', headers=get_token(manager_token))
 
         data = json.loads(res.data)
 
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted_warehouse'], 8)
+        self.assertEqual(data['deleted_warehouse'], 3)
+
 
 
     def test_422_warehouse_does_not_exist(self):
@@ -174,11 +188,13 @@ class WarehouseTestCase(unittest.TestCase):
         self.assertTrue(len(data['codes_list']))
         self.assertTrue(data['new_code_id'])
 
+        code_delete = ProductCodes.query.filter(ProductCodes.product_code == self.new_product_code['product_code']).one_or_none()
+        code_delete.delete()
 
 
     def test_405_post_product_code(self):
 
-        res = self.client().post('/product-code/2', json=self.new_product_code, headers=get_token(manager_token))
+        res = self.client().post('/product-code/2654', json=self.new_product_code, headers=get_token(manager_token))
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 405)
@@ -269,12 +285,21 @@ class WarehouseTestCase(unittest.TestCase):
 
 
     def test_delete_stock_item(self):
-        res = self.client().delete('/stock-items/11', headers=get_token(manager_token))
+        stock = StockItems(product_name="Test product", quantity=23,
+                           expiration_date='2021-06-21', warehouse_id=1,
+                           product_code='A2AA')
+
+        stock.id = 2
+        stock.insert()
+
+        res = self.client().delete('/stock-items/2', headers=get_token(manager_token))
 
         data = json.loads(res.data)
 
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted_stock'], 11)
+        self.assertEqual(data['deleted_stock'], 2)
+
+
 
 
 
@@ -289,12 +314,24 @@ class WarehouseTestCase(unittest.TestCase):
 
 
     def test_delete_product_code(self):
-        res = self.client().delete('/product-code/9', headers=get_token(manager_token))
+        code = ProductCodes(product_code="CXS1", description="soft cheese",
+                           unit='kg')
+
+
+        code.id = 2
+        code.insert()
+
+
+        res = self.client().delete('/product-code/2', headers=get_token(manager_token))
 
         data = json.loads(res.data)
 
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted_code'], 9)
+        self.assertEqual(data['deleted_code'], 2)
+
+
+
+
 
 
 

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+            <h1>This is your token</h1>
+            <br>
+            <h2 id="your-token"></h2>
+
+
+
+
+
+<script>
+
+    let url = window.location.href
+
+    var splitUrl = url.split("access_token=");
+    var tokenArr = splitUrl[1].split("&expires_in=7200&token_type=Bearer");
+    var justToken = tokenArr[0]
+    console.log(justToken)
+    document.getElementById("your-token").innerHTML = justToken
+
+
+
+
+</script>
+
+
+</body>
+
+
+</html>
