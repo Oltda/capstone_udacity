@@ -1,3 +1,8 @@
+                                
+                                            WAREHOUSE APP
+_________________________________________________________________________________________________________________________
+
+
 This is an API for a warehouse application that allows its users to add, delete, and update warehouse information,
 stock items and product codes.
 
