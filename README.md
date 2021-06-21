@@ -49,9 +49,9 @@ body:
      "name" : "Warehouse6",
      "address" : "City6"
     }
------------------------------------------    
+   
 ********posting new product code********
-
+----------------------------------------- 
 endpoint:
     https://dans-warehouse-app.herokuapp.com/product-code
     
@@ -63,8 +63,9 @@ body:
     }    
     
 NOTE (each product code must have a unique name)
- -----------------------------------------   
+  
 ********posting new stock item********
+----------------------------------------- 
 endpoint:
     https://dans-warehouse-app.herokuapp.com/stock-items
 
@@ -82,23 +83,27 @@ NOTE2 (warehouse and product code are foreign keys)
   
 
 ********View warehouses********
+----------------------------------------- 
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/warehouse
 
 
 ********View Stock********
+----------------------------------------- 
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/stock-items
 
 
 
 ********View Product Codes********
+----------------------------------------- 
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/product-code
 
 
 
 ********Patch warehouses********
+----------------------------------------- 
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/warehouse/1
 
@@ -112,6 +117,7 @@ body:
 
 
 ********Patch Stock********
+----------------------------------------- 
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/stock-items/1
 
@@ -129,16 +135,19 @@ body:
 
     
 ********Delete Warehouses********
+----------------------------------------- 
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/warehouse/3
 
 
 ********Delete Stock********
+----------------------------------------- 
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/stock-items/2
 
 
 ********Delete Product Codes********
+----------------------------------------- 
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/product-code/3
  
