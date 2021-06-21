@@ -17,19 +17,17 @@ where you can enter the following credentials for two different roles:
 
 
 CREDENTIALS
+---------------------------------------
 
 To test the application you can log in with the following credentials
 
----------------------------------------
+
 username: manager@manager.com
 password: Password1
 
 permissions: Can only view warehouses, stock and product codes 
 
----------------------------------------
 
-
----------------------------------------
 username: employee@employee.com
 password: Password2
 
@@ -42,7 +40,7 @@ NOTE: (patch was not implemented for product codes)
 POSTMAN EXAMPLES
 
 ********posting new warehouse********
-
+-----------------------------------------
 endpoint:
     https://dans-warehouse-app.herokuapp.com/warehouse
 
@@ -51,7 +49,7 @@ body:
      "name" : "Warehouse6",
      "address" : "City6"
     }
-    
+-----------------------------------------    
 ********posting new product code********
 
 endpoint:
@@ -65,7 +63,7 @@ body:
     }    
     
 NOTE (each product code must have a unique name)
-    
+ -----------------------------------------   
 ********posting new stock item********
 endpoint:
     https://dans-warehouse-app.herokuapp.com/stock-items
