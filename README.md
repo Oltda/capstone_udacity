@@ -14,8 +14,8 @@ Udacity Full-Stack Developer Nanodegree.
 Another motivation was the fact that a friend of mine has recently started his own business and expressed his need of 
 a stock management app that would help him to keep track of his items and their expiration dates 
 
-Access Token
-_________________________________________________________________________________________________________________________
+ACCESS TOKEN
+---------------------------------------
 
 To obtain an access token to test the application in Postman please visit the following url: 
 
@@ -113,6 +113,7 @@ POSTMAN EXAMPLES
 
 ********posting new warehouse********
 -----------------------------------------
+method: POST
 endpoint:
     https://dans-warehouse-app.herokuapp.com/warehouse
 
@@ -132,6 +133,7 @@ example response:
             
 ********posting new product code********
 ----------------------------------------- 
+method: POST
 endpoint:
     https://dans-warehouse-app.herokuapp.com/product-code
     
@@ -160,6 +162,7 @@ example response:
         }
 ********posting new stock item********
 ----------------------------------------- 
+method: POST
 endpoint:
     https://dans-warehouse-app.herokuapp.com/stock-items
 
@@ -208,6 +211,7 @@ example response:
 
 ********View warehouses********
 ----------------------------------------- 
+method: GET
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/warehouse
 
@@ -253,6 +257,7 @@ example response:
 
 ********View Stock********
 ----------------------------------------- 
+method: GET
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/stock-items
 
@@ -288,6 +293,7 @@ Example response:
 
 ********View Product Codes********
 ----------------------------------------- 
+method: GET
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/product-code
 
@@ -304,6 +310,7 @@ example response:
 
 ********Patch warehouses********
 ----------------------------------------- 
+method: PATCH
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/warehouse/1
 
@@ -340,9 +347,9 @@ example response:
 
 ********Patch Stock********
 ----------------------------------------- 
+method: PATCH
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/stock-items/1
-
 
 
 body:
@@ -417,18 +424,21 @@ example response:
     
 ********Delete Warehouses********
 ----------------------------------------- 
+method: DELETE
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/warehouse/3
 
 
 ********Delete Stock********
 ----------------------------------------- 
+method: DELETE
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/stock-items/2
 
 
 ********Delete Product Codes********
 ----------------------------------------- 
+method: DELETE
 Endpoint:
 https://dans-warehouse-app.herokuapp.com/product-code/3
  
