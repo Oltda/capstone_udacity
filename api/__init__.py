@@ -1,4 +1,14 @@
-from flask import Flask, request, abort, jsonify, render_template, session, redirect, url_for
+from flask import (
+    Flask,
+    request,
+    abort,
+    jsonify,
+    render_template,
+    session,
+    redirect,
+    url_for
+    )
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
@@ -6,9 +16,6 @@ from database import setup_db, Warehouse, StockItems, ProductCodes
 from auth import AuthError, requires_auth
 
 from authlib.integrations.flask_client import OAuth
-
-
-
 
 
 def create_app(test_config=None):
@@ -22,19 +29,17 @@ def create_app(test_config=None):
     AUTH0_DOMAIN = 'dev-j1fpxr2o.eu.auth0.com'
     AUTH0_JWT_API_AUDIENCE = 'warehouse'
     AUTH0_CLIENT_ID = 'OKLQ4Z8FAnpNsf8KhIQPdKd61DXucXiO'
-    #AUTH0_CALLBACK_URL = 'http://localhost:3000'
-    #AUTH0_CALLBACK_URL = 'http://localhost:5000/result'
+    # AUTH0_CALLBACK_URL = 'http://localhost:3000'
+    # AUTH0_CALLBACK_URL = 'http://localhost:5000/result'
     AUTH0_CALLBACK_URL = 'https://dans-warehouse-app.herokuapp.com/result'
-
 
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
-        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers',
+                             'Content-Type,Authorization,true')
+        response.headers.add('Access-Control-Allow-Methods',
+                             'GET,PUT,POST,DELETE,OPTIONS')
         return response
-
-
-
 
     @app.route("/authorization/url", methods=["GET"])
     def generate_auth_url():
@@ -46,43 +51,44 @@ def create_app(test_config=None):
 
         return render_template('login.html', url=url)
 
-
     @app.route('/result', methods=['GET', 'POST'])
     def callbackpage():
-
         return render_template('result.html')
-
-
-
 
     @app.route('/warehouse', methods=['GET'])
     @requires_auth('get:warehouse')
     def show_warehouses(payload):
-
         warehouse_collection = Warehouse.query.all()
         warehouse_list = []
 
         for i in warehouse_collection:
-            warehouse_list.append({"id": i.id, "name": i.name, "address": i.address})
+            warehouse_list.append({
+                "id": i.id,
+                "name": i.name,
+                "address": i.address
+            })
 
         stock = StockItems.query.all()
 
         stock_array = []
-
         for i in stock:
             code = ProductCodes.query.filter_by(product_code=i.product_code).first()
-
-            stock_item = {'id':i.id, 'name': i.product_name, 'quantity': i.quantity,
-                          'expiration_date': i.expiration_date.strftime('%d-%b-%Y'), 'warehouse_id': i.warehouse_id, 'product_code': i.product_code, 'unit': code.unit}
+            stock_item = {
+                'id': i.id,
+                'name': i.product_name,
+                'quantity': i.quantity,
+                'expiration_date': i.expiration_date.strftime('%d-%b-%Y'),
+                'warehouse_id': i.warehouse_id,
+                'product_code': i.product_code,
+                'unit': code.unit
+            }
             stock_array.append(stock_item)
-
 
         return jsonify({
             'success': True,
             'warehouse_list': warehouse_list,
             'stock_array': stock_array
         })
-
 
     @app.route('/warehouse', methods=['POST'])
     @requires_auth('post:warehouse')
@@ -100,17 +106,19 @@ def create_app(test_config=None):
             warehouse_collection = Warehouse.query.all()
             warehouse_list = []
 
-
             for i in warehouse_collection:
-                warehouse_list.append({"id": i.id, "name": i.name, "address": i.address})
+                warehouse_list.append({
+                    "id": i.id,
+                    "name": i.name,
+                    "address": i.address
+                })
 
             return jsonify({
                 'success': True,
-                'new_warehouse_id':warehouse.id
+                'new_warehouse_id': warehouse.id
             })
         except:
             abort(422)
-
 
     @app.route('/warehouse/<int:warehouse_id>', methods=['PATCH'])
     @requires_auth('patch:warehouse')
@@ -119,14 +127,13 @@ def create_app(test_config=None):
         body = request.get_json()
 
         try:
-            edited_name = body.get('name', None)
-            edited_address = body.get('address', None)
+            edited_name = body.get('name')
+            edited_address = body.get('address')
 
             warehouse_patch = Warehouse.query.filter(Warehouse.id == warehouse_id).one_or_none()
 
             warehouse_patch.name = edited_name
             warehouse_patch.address = edited_address
-
 
             warehouse_patch.update()
 
@@ -134,7 +141,11 @@ def create_app(test_config=None):
             warehouse_list = []
 
             for i in warehouse_collection:
-                warehouse_list.append({"id": i.id, "name": i.name, "address": i.address})
+                warehouse_list.append({
+                    "id": i.id,
+                    "name": i.name,
+                    "address": i.address
+                })
 
             return jsonify({
                 'success': True,
@@ -142,11 +153,8 @@ def create_app(test_config=None):
                 'edited_warehouse_id': warehouse_patch.id
             })
 
-
         except:
             abort(422)
-
-
 
     @app.route('/warehouse/<int:warehouse_id>', methods=['DELETE'])
     @requires_auth('delete:warehouse')
@@ -167,17 +175,10 @@ def create_app(test_config=None):
 
             return jsonify({
                 'success': True,
-                'deleted_warehouse':warehouse_id
-
+                'deleted_warehouse': warehouse_id
             })
         except:
             abort(422)
-
-
-
-
-
-
 
     @app.route('/product-code', methods=['GET'])
     @requires_auth('get:product-code')
@@ -195,9 +196,6 @@ def create_app(test_config=None):
             'codes_list': codes_list
         })
 
-
-
-
     @app.route('/product-code', methods=['POST'])
     @requires_auth('post:product-code')
     def post_product_code(payload):
@@ -208,7 +206,11 @@ def create_app(test_config=None):
             new_description = body.get('description', None)
             new_unit = body.get('unit', None)
 
-            code = ProductCodes(product_code=new_code, description=new_description, unit=new_unit)
+            code = ProductCodes(
+                product_code=new_code,
+                description=new_description,
+                unit=new_unit
+            )
 
             code.insert()
 
@@ -224,12 +226,8 @@ def create_app(test_config=None):
                 'new_code_id': code.id
             })
 
-
         except:
             abort(422)
-
-
-
 
     @app.route('/product-code/<int:code_id>', methods=['DELETE'])
     @requires_auth('delete:product-code')
@@ -240,28 +238,18 @@ def create_app(test_config=None):
             if code_to_delete is None:
                 abort(404)
 
-
             stock_to_delete = StockItems.query.filter(StockItems.product_code == code_to_delete.product_code).all()
-
             for i in stock_to_delete:
                 i.delete()
-
 
             code_to_delete.delete()
 
             return jsonify({
                 'success': True,
-                'deleted_code':code_id
-
+                'deleted_code': code_id
             })
         except:
             abort(422)
-
-
-
-
-
-
 
     @app.route('/stock-items', methods=['GET'])
     @requires_auth('get:stock-items')
@@ -271,9 +259,12 @@ def create_app(test_config=None):
         items_list = []
 
         for i in stock_items_collection:
-            items_list.append({"id": i.id, "product_name": i.product_name,
-                               "quantity": i.quantity, "expiration_date": i.expiration_date.strftime('%d-%b-%Y'),
-                               "warehouse_id": i.warehouse_id, "product_code": i.product_code})
+            items_list.append({"id": i.id,
+                               "product_name": i.product_name,
+                               "quantity": i.quantity,
+                               "expiration_date": i.expiration_date.strftime('%d-%b-%Y'),
+                               "warehouse_id": i.warehouse_id,
+                               "product_code": i.product_code})
 
 
         product_codes_collection = ProductCodes.query.all()
@@ -290,7 +281,6 @@ def create_app(test_config=None):
         })
 
 
-
     @app.route('/stock-items/<int:warehouse_id>', methods=['GET'])
     @requires_auth('get:stock-items')
     def show_warehouse_stock(payload, warehouse_id):
@@ -303,19 +293,25 @@ def create_app(test_config=None):
         for i in stock:
 
             code = ProductCodes.query.filter_by(product_code=i.product_code).first()
-            stock_item = {'id':i.id, 'name': i.product_name, 'quantity': i.quantity,
-                              'expiration_date': i.expiration_date.strftime('%d-%b-%Y'), 'warehouse_id': i.warehouse_id, 'product_code': i.product_code, 'unit': code.unit}
+            stock_item = {
+                          'id': i.id,
+                          'name': i.product_name,
+                          'quantity': i.quantity,
+                          'expiration_date': i.expiration_date.strftime('%d-%b-%Y'),
+                          'warehouse_id': i.warehouse_id,
+                          'product_code': i.product_code,
+                          'unit': code.unit
+                          }
             stock_array.append(stock_item)
-
-
-
 
         warehouse_collection = Warehouse.query.all()
         warehouse_list = []
 
         for i in warehouse_collection:
-            warehouse_list.append({"id": i.id, "name": i.name, "address": i.address})
-
+            warehouse_list.append({
+                "id": i.id,
+                "name": i.name,
+                "address": i.address})
 
         return jsonify({
             'success': True,
@@ -336,8 +332,6 @@ def create_app(test_config=None):
             warehouse_id = int(body.get('warehouse_id', None))
             product_code = body.get('product_code', None)
 
-
-
             item = StockItems(product_name=new_product_name, quantity=new_quantity,
                               expiration_date=new_expiration_date, warehouse_id=warehouse_id,
                               product_code=product_code)
@@ -346,19 +340,20 @@ def create_app(test_config=None):
 
             stock_items_collection = StockItems.query.all()
             items_list = []
-
             for i in stock_items_collection:
-                items_list.append({"id": i.id, "product_name": i.product_name,
-                                   "quantity": i.quantity, "expiration_date": i.expiration_date.strftime('%d-%b-%Y'),
-                                   "warehouse_id": i.warehouse_id, "product_code": i.product_code})
+                items_list.append({
+                            "id": i.id,
+                            "product_name": i.product_name,
+                            "quantity": i.quantity,
+                            "expiration_date": i.expiration_date.strftime('%d-%b-%Y'),
+                            "warehouse_id": i.warehouse_id,
+                            "product_code": i.product_code
+                            })
 
             product_codes_collection = ProductCodes.query.all()
             product_code_list = []
-
             for i in product_codes_collection:
                 product_code_list.append(i.product_code)
-
-
 
             return jsonify({
                 'success': True,
@@ -369,10 +364,6 @@ def create_app(test_config=None):
         except:
             abort(422)
 
-
-
-
-
     @app.route('/stock-items/<int:stock_id>', methods=['PATCH'])
     @requires_auth('patch:stock-items')
     def edit_stock(payload, stock_id):
@@ -380,14 +371,13 @@ def create_app(test_config=None):
         body = request.get_json()
 
         try:
-            edit_product_name = body.get('product_name', None)
-            edit_quantity = int(body.get('quantity', None))
-            edit_expiration_date = body.get('expiration_date', None)
-            edit_warehouse_id = int(body.get('warehouse_id', None))
-            edit_product_code = body.get('product_code', None)
+            edit_product_name = body.get('product_name')
+            edit_quantity = int(body.get('quantity'))
+            edit_expiration_date = body.get('expiration_date')
+            edit_warehouse_id = int(body.get('warehouse_id'))
+            edit_product_code = body.get('product_code')
 
             stock_patch = StockItems.query.filter(StockItems.id == stock_id).one_or_none()
-
 
 
             stock_patch.product_name = edit_product_name
@@ -398,27 +388,29 @@ def create_app(test_config=None):
 
             stock_patch.update()
 
-
-
-
             warehouse_collection = Warehouse.query.all()
             warehouse_list = []
-
             for i in warehouse_collection:
-                warehouse_list.append({"id": i.id, "name": i.name, "address": i.address})
-
+                warehouse_list.append({
+                    "id": i.id,
+                    "name": i.name,
+                    "address": i.address
+                })
 
             stock_items_collection = StockItems.query.all()
             items_list = []
-
             for i in stock_items_collection:
-                items_list.append({"id": i.id, "product_name": i.product_name,
-                                   "quantity": i.quantity, "expiration_date": i.expiration_date.strftime('%d-%b-%Y'),
-                                   "warehouse_id": i.warehouse_id, "product_code": i.product_code})
+                items_list.append({
+                    "id": i.id,
+                    "product_name": i.product_name,
+                    "quantity": i.quantity,
+                    "expiration_date": i.expiration_date.strftime('%d-%b-%Y'),
+                    "warehouse_id": i.warehouse_id,
+                    "product_code": i.product_code
+                })
 
             product_codes_collection = ProductCodes.query.all()
             product_code_list = []
-
             for i in product_codes_collection:
                 product_code_list.append(i.product_code)
 
@@ -428,7 +420,6 @@ def create_app(test_config=None):
                 'items_list': items_list,
                 'codes': product_code_list
             })
-
 
         except:
             abort(422)
@@ -442,14 +433,11 @@ def create_app(test_config=None):
             if stock_to_delete is None:
                 abort(404)
 
-
-
             stock_to_delete.delete()
 
             return jsonify({
                 'success': True,
                 'deleted_stock': stock_id
-
             })
         except:
             abort(422)
@@ -495,6 +483,7 @@ def create_app(test_config=None):
         }), 405
 
     return app
+
 
 app = create_app()
 

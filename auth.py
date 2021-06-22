@@ -1,9 +1,8 @@
 import json
-from flask import request, _request_ctx_stack, abort
 from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
-from flask import Flask, request, abort, jsonify, render_template, session, redirect
+from flask import Flask, request
 import os
 from os import environ
 
@@ -17,11 +16,6 @@ class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
-
-
-
-
-
 
 
 def get_token_auth_header():
@@ -40,7 +34,6 @@ def get_token_auth_header():
             'description': 'The header is not valid',
             'success': False
         }, 401)
-
 
     elif header_parts[0].lower() != 'bearer':
         raise AuthError({
@@ -134,13 +127,6 @@ def verify_decode_jwt(token):
         'description': 'Unable to find the appropriate key.',
         'success': False
     }, 400)
-
-
-
-
-
-
-
 
 
 def requires_auth(permission=""):

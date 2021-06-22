@@ -5,16 +5,13 @@ import json
 from datetime import datetime
 from flask_migrate import Migrate
 from dotenv import load_dotenv
-
+from dataclasses import dataclass
 
 database_path = os.environ.get('DATABASE_URL')
 
 database_name = "capstone_database"
 
-# database_path = "postgresql://{}:{}@{}/{}".format(
-#     'oltda', 'janaoltova', 'localhost:5432', database_name)
-
-database_path="postgres://ofapcuhmthwgzf:4dad289b111001edc5d9534f8ac3e396f6a662b0f6c3cc7ea00d3087b38a4c33@ec2-52-4-111-46.compute-1.amazonaws.com:5432/d5vufr3v9884d9"
+database_path = "postgres://ofapcuhmthwgzf:4dad289b111001edc5d9534f8ac3e396f6a662b0f6c3cc7ea00d3087b38a4c33@ec2-52-4-111-46.compute-1.amazonaws.com:5432/d5vufr3v9884d9"
 
 db = SQLAlchemy()
 
@@ -26,17 +23,10 @@ def setup_db(app, database_path=database_path):
     db.create_all()
 
 
-class Warehouse(db.Model):
-    __tablename__ = 'warehouse'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    address = db.Column(db.String)
-    stock_items = db.relationship('StockItems', backref='warehouse', lazy=True)
 
-    def __init__(self, name, address):
-        self.name = name
-        self.address = address
+class DatabaseOprations(db.Model):
+    __abstract__ = True
 
     def insert(self):
         db.session.add(self)
@@ -49,7 +39,30 @@ class Warehouse(db.Model):
     def update(self):
         db.session.commit()
 
-class StockItems(db.Model):
+
+@dataclass
+class Warehouse(DatabaseOprations):
+    id: int
+    name: String
+    address: String
+
+    __tablename__ = 'warehouse'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    address = db.Column(db.String)
+    stock_items = db.relationship('StockItems', backref='warehouse', lazy=True)
+
+
+@dataclass
+class StockItems(DatabaseOprations):
+    id = int
+    product_name = String
+    quantity = int
+    expiration_date = String
+    warehouse_id = int
+    product_code = String
+
     __tablename__ = 'stock_items'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -59,25 +72,14 @@ class StockItems(db.Model):
     warehouse_id = db.Column(db.Integer, db.ForeignKey('warehouse.id'))
     product_code = db.Column(db.String, db.ForeignKey('product_codes.product_code'))
 
-    def __init__(self, product_name, quantity, expiration_date, warehouse_id, product_code):
-        self.product_name = product_name
-        self.quantity = quantity
-        self.expiration_date = expiration_date
-        self.warehouse_id = warehouse_id
-        self.product_code = product_code
 
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
+@dataclass
+class ProductCodes(DatabaseOprations):
+    id = int
+    product_code = String
+    description = String
+    unit = String
 
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
-    def update(self):
-        db.session.commit()
-
-class ProductCodes(db.Model):
     __tablename__ = 'product_codes'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -85,21 +87,3 @@ class ProductCodes(db.Model):
     description = db.Column(db.String)
     unit = db.Column(db.String)
     stock_items = db.relationship('StockItems', backref='product_codes', lazy=True)
-
-    def __init__(self, product_code, description, unit):
-        self.product_code = product_code
-        self.description = description
-        self.unit = unit
-
-
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
-    def update(self):
-        db.session.commit()
-
