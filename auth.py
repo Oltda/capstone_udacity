@@ -5,11 +5,13 @@ from urllib.request import urlopen
 from flask import Flask, request
 import os
 from os import environ
+from dotenv import load_dotenv
 
-AUTH0_DOMAIN = 'dev-j1fpxr2o.eu.auth0.com'
+load_dotenv()
+AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN')
 
-ALGORITHMS = ['RS256']
-API_AUDIENCE = 'warehouse'
+ALGORITHMS = os.environ.get('ALGORITHMS')
+API_AUDIENCE = os.environ.get('API_AUDIENCE')
 
 
 class AuthError(Exception):

@@ -16,7 +16,10 @@ from database import setup_db, Warehouse, StockItems, ProductCodes
 from auth import AuthError, requires_auth
 
 from authlib.integrations.flask_client import OAuth
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 def create_app(test_config=None):
     app = Flask(__name__)
@@ -24,14 +27,20 @@ def create_app(test_config=None):
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
     CORS(app)
     oauth = OAuth(app)
-    app.secret_key = 'jgjhghg323jhg3j2hg3j2hg32jhg32jhg'
+    #app.secret_key = 'jgjhghg323jhg3j2hg3j2hg32jhg32jhg'
 
-    AUTH0_DOMAIN = 'dev-j1fpxr2o.eu.auth0.com'
-    AUTH0_JWT_API_AUDIENCE = 'warehouse'
-    AUTH0_CLIENT_ID = 'OKLQ4Z8FAnpNsf8KhIQPdKd61DXucXiO'
+    # AUTH0_DOMAIN = 'dev-j1fpxr2o.eu.auth0.com'
+    # AUTH0_JWT_API_AUDIENCE = 'warehouse'
+    # AUTH0_CLIENT_ID = 'OKLQ4Z8FAnpNsf8KhIQPdKd61DXucXiO'
+    # AUTH0_CALLBACK_URL = 'https://dans-warehouse-app.herokuapp.com/result'
     # AUTH0_CALLBACK_URL = 'http://localhost:3000'
     # AUTH0_CALLBACK_URL = 'http://localhost:5000/result'
-    AUTH0_CALLBACK_URL = 'https://dans-warehouse-app.herokuapp.com/result'
+
+    app.secret_key = os.environ.get('SECRET_KEY')
+    AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN')
+    AUTH0_JWT_API_AUDIENCE = os.environ.get('AUTH0_JWT_API_AUDIENCE')
+    AUTH0_CLIENT_ID = os.environ.get('AUTH0_CLIENT_ID')
+    AUTH0_CALLBACK_URL = os.environ.get('AUTH0_CALLBACK_URL')
 
     @app.after_request
     def after_request(response):

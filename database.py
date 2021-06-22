@@ -6,7 +6,11 @@ from datetime import datetime
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from dataclasses import dataclass
+import os
+from dotenv import load_dotenv
 
+
+load_dotenv()
 database_path = os.environ.get('DATABASE_URL')
 
 database_name = "capstone_database"
